@@ -57,9 +57,8 @@ DROP TABLE IF EXISTS `customers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customers` (
   `CustomerID` int NOT NULL,
-  `FirstName` varchar(255) NOT NULL,
-  `LastName` varchar(255) NOT NULL,
-  `Phone` varchar(45) NOT NULL,
+  `FullName` varchar(255) NOT NULL,
+  `ContactNumber` varchar(45) NOT NULL,
   `Email` varchar(255) NOT NULL,
   PRIMARY KEY (`CustomerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -82,12 +81,13 @@ DROP TABLE IF EXISTS `menuitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `menuitems` (
-  `ItemID` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(200) NOT NULL,
-  `Type` varchar(100) NOT NULL,
+  `MenuItemsID` int NOT NULL AUTO_INCREMENT,
+  `CourseName` varchar(200) DEFAULT NULL,
+  `StarterName` varchar(200) DEFAULT NULL,
+  `DessertName` varchar(200) DEFAULT NULL,
   `Price` decimal(10,0) NOT NULL,
-  PRIMARY KEY (`ItemID`),
-  CONSTRAINT `Menu_FK` FOREIGN KEY (`ItemID`) REFERENCES `littlelemon`.`menus` (`MenuID`)
+  PRIMARY KEY (`MenuItemsID`),
+  CONSTRAINT `Menu_FK` FOREIGN KEY (`MenuItemsID`) REFERENCES `littlelemon`.`menus` (`MenuID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -109,8 +109,9 @@ DROP TABLE IF EXISTS `menus`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `menus` (
   `MenuID` int NOT NULL,
-  `ItemID` int NOT NULL,
+  `MenuName` varchar(255) NOT NULL,
   `Cuisine` varchar(100) NOT NULL,
+  `MenuItemsID` int NOT NULL,
   PRIMARY KEY (`MenuID`),
   CONSTRAINT `Order_Menu_FK` FOREIGN KEY (`MenuID`) REFERENCES `littlelemon`.`orders` (`OrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -162,11 +163,14 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `OrderID` int NOT NULL,
   `TableNo` int DEFAULT NULL,
-  `MenuID` int NOT NULL,
   `BookingID` int DEFAULT NULL,
-  `BillAmount` decimal(10,0) NOT NULL,
+  `MenuID` int NOT NULL,
   `Quantity` int NOT NULL,
-  PRIMARY KEY (`OrderID`)
+  `TotalCost` decimal(10,0) NOT NULL,
+  `CustomerID` int NOT NULL,
+  PRIMARY KEY (`OrderID`),
+  KEY `Orders_Customers_FK_idx` (`CustomerID`),
+  CONSTRAINT `Orders_Customers_FK` FOREIGN KEY (`CustomerID`) REFERENCES `littlelemon`.`customers` (`CustomerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -216,4 +220,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-19 14:07:36
+-- Dump completed on 2023-07-19 14:29:15
