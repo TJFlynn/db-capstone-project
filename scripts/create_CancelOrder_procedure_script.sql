@@ -1,0 +1,4 @@
+CREATE PROCEDURE CancelOrder (IN ID INT)
+DELETE FROM Orders WHERE OrderID = ID;
+
+CALL CancelOrder(10);
