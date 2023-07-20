@@ -1,5 +1,6 @@
+use littlelemon;
 DELIMITER //
-CREATE PROCEDURE AddValidBooking(IN BookDate DATE, IN TableNumber INT)
+CREATE PROCEDURE ManageBooking(IN BookDate DATE, IN TableNumber INT)
 BEGIN
 	START TRANSACTION;
 	INSERT INTO bookings (BookingDate, TableNo, CustomerID) VALUES (BookDate, TableNumber, 1);
@@ -18,4 +19,4 @@ BEGIN
     Limit 1;
 END //
 DELIMITER ;
-CALL AddValidBooking("2022-10-10", 7)
+CALL ManageBooking("2022-10-10", 7)
