@@ -1,6 +1,4 @@
 CREATE PROCEDURE GetMaxQuantity()  
-SELECT Max(Quantity)
-FROM Orders;
-
+SELECT Max(Quantity) FROM Orders;
 
 CALL GetMaxQuantity();

@@ -36,32 +36,23 @@ VALUES
 (4, 'Carbonara', 'Turkish Tomato bread', 'Affogato', 'Roma Red wine', 80, 4),
 (5, 'Kabasa', 'Greek Falafel', 'Turkish yoghurt', 'Ankara White Wine', 60, 5);
 
-INSERT INTO Bookings (BookingID, Date, Time, TableNo, CustomerID, StaffID)
+INSERT INTO Bookings (BookingID, BookingDate, TableNo, CustomerID)
 VALUES
-(1, '2023-07-19', '19:00:00', 12, 1, 1),
-(2, '2023-07-19', '20:00:00', 12, 2, 1),
-(3, '2023-07-20', '19:00:00', 19, 3, 3),
-(4, '2023-07-21', '20:00:00', 15, 4, 4),
-(5, '2023-07-19', '19:30:00', 5, 5, 2),
-(6, '2023-07-23', '20:00:00', 8, 6, 5);
+(1, '2022-10-10', 5, 1),
+(2, '2022-11-12', 3, 3),
+(3, '2022-10-11', 2, 2),
+(4, '2022-10-13', 2, 1);
 
 INSERT INTO Orders (OrderID, TableNo, MenuID, BookingID, Quantity, TotalCost, CustomerID)
 VALUES
-(1, 12, 1, 1, 5, 250, 1),
-(2, 19, 2, 2, 3, 200, 2),
-(3, 15, 2, 3, 1, 37, 3),
-(4, 5, 3, 4, 1, 40, 4),
-(5, 8, 1, 5, 1, 43, 5),
-(6, 15, 2, 3, 1, 37, 3),
-(7, 5, 3, 4, 1, 40, 4),
-(8, 8, 1, 5, 1, 43, 5),
-(9, 5, 3, 4, 1, 40, 4),
-(10, 8, 1, 5, 1, 43, 5);
+(1, 5, 1, 1, 5, 250, 1),
+(2, 3, 2, 2, 3, 200, 2),
+(3, 2, 2, 3, 1, 37, 3),
+(4, 2, 3, 4, 1, 40, 4);
 
 INSERT INTO OrderStatus (OrderStatusID, OrderID, DeliveryDate, Status)
 VALUES
-(1, 1, '2023-07-19', 'delivered'),
-(2, 2, '2023-07-19', 'delivered'),
-(3, 3, '2023-07-20', 'processing'),
-(4, 4, '2023-07-21', 'processing'),
-(5, 5, '2023-07-23', 'processing');
+(1, 1, '2022-10-10', 'delivered'),
+(2, 2, '2022-11-12', 'processing'),
+(3, 3, '2022-10-11', 'delivered'),
+(4, 4, '2022-10-13', 'delivered');

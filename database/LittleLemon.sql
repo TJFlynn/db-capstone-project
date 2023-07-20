@@ -24,16 +24,12 @@ DROP TABLE IF EXISTS `bookings`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
   `BookingID` int NOT NULL AUTO_INCREMENT,
-  `Date` date NOT NULL,
-  `Time` time NOT NULL,
+  `BookingDate` date NOT NULL,
   `TableNo` int NOT NULL,
-  `CustomerID` int NOT NULL,
-  `StaffID` int NOT NULL,
+  `CustomerID` int DEFAULT NULL,
   PRIMARY KEY (`BookingID`),
-  KEY `Employee_FK_idx` (`StaffID`),
-  KEY `Customer_FK_idx` (`CustomerID`),
-  CONSTRAINT `Customer_FK` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
-  CONSTRAINT `Staff_FK` FOREIGN KEY (`StaffID`) REFERENCES `staff` (`StaffID`)
+  KEY `Customer_Bookings_FK_idx` (`CustomerID`),
+  CONSTRAINT `Customer_Bookings_FK` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -43,7 +39,7 @@ CREATE TABLE `bookings` (
 
 LOCK TABLES `bookings` WRITE;
 /*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
-INSERT INTO `bookings` VALUES (1,'2023-07-19','19:00:00',12,1,1),(2,'2023-07-19','20:00:00',12,2,1),(3,'2023-07-20','19:00:00',19,3,3),(4,'2023-07-21','20:00:00',15,4,4),(5,'2023-07-19','19:30:00',5,5,2),(6,'2023-07-23','20:00:00',8,6,5);
+INSERT INTO `bookings` VALUES (1,'2022-10-10',5,1),(2,'2022-11-12',3,3),(3,'2022-10-11',2,2),(4,'2022-10-13',2,1);
 /*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +96,7 @@ CREATE TABLE `menuitems` (
 
 LOCK TABLES `menuitems` WRITE;
 /*!40000 ALTER TABLE `menuitems` DISABLE KEYS */;
-INSERT INTO `menuitems` VALUES (1,'Greek Salad','Olives','Greek Yoghurt','Athens White wine',50,1),(2,'Bean soup','Italian	Flatbread','Ice cream','Corfu Red Wine',75,2),(3,'Pizza','Italian	Minestrone','Cheesecake','Italian Coffee',100,3),(4,'Carbonara','Turkish Tomato bread','Affogato','Roma Red wine',80,4),(5,'Kabasa','Greek Falafel','Turkish yoghurt','Ankara White Wine',60,5);
+INSERT INTO `menuitems` VALUES (1,'Greek Salad','Olives','Greek yoghurt','Athens White wine',50,1),(2,'Bean soup','Italian Flatbread','Ice cream','Corfu Red Wine',75,2),(3,'Pizza','Italian Minestrone','Cheesecake','Italian Coffee',100,3),(4,'Carbonara','Turkish Tomato bread','Affogato','Roma Red wine',80,4),(5,'Kabasa','Greek Falafel','Turkish yoghurt','Ankara White Wine',60,5);
 /*!40000 ALTER TABLE `menuitems` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,6 +111,7 @@ CREATE TABLE `menus` (
   `MenuID` int NOT NULL,
   `MenuItemsID` int DEFAULT NULL,
   `Cuisine` varchar(100) NOT NULL,
+  `MenuName` varchar(200) NOT NULL,
   PRIMARY KEY (`MenuID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -125,7 +122,7 @@ CREATE TABLE `menus` (
 
 LOCK TABLES `menus` WRITE;
 /*!40000 ALTER TABLE `menus` DISABLE KEYS */;
-INSERT INTO `menus` VALUES (1,1,'Greek'),(2,2,'Italian'),(3,3,'Italian'),(4,4,'Turkish'),(5,5,'Greek');
+INSERT INTO `menus` VALUES (1,1,'Greek','Moussaka'),(2,2,'Italian','Manti'),(3,3,'Italian','Venicia'),(4,4,'Turkish','Apertivo'),(5,5,'Greek','Corfu');
 /*!40000 ALTER TABLE `menus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +157,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,12,1,1,2,86,1),(2,19,2,2,1,37,2),(3,15,2,3,1,37,3),(4,5,3,4,1,40,4),(5,8,1,5,1,43,5);
+INSERT INTO `orders` VALUES (1,5,1,1,5,250,1),(2,3,2,2,3,200,2),(3,2,2,3,1,37,3),(4,2,3,4,1,40,4),(5,3,1,1,2,25,1),(6,3,1,1,2,25,2),(7,3,2,1,2,25,2);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,9 +185,23 @@ CREATE TABLE `orderstatus` (
 
 LOCK TABLES `orderstatus` WRITE;
 /*!40000 ALTER TABLE `orderstatus` DISABLE KEYS */;
-INSERT INTO `orderstatus` VALUES (1,1,'2023-07-19','delivered'),(2,2,'2023-07-19','delivered'),(3,3,'2023-07-20','processing'),(4,4,'2023-07-21','processing'),(5,5,'2023-07-23','processing');
+INSERT INTO `orderstatus` VALUES (1,1,'2022-10-10','delivered'),(2,2,'2022-11-12','processing'),(3,3,'2022-10-11','delivered'),(4,4,'2022-10-13','delivered');
 /*!40000 ALTER TABLE `orderstatus` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `ordersview`
+--
+
+DROP TABLE IF EXISTS `ordersview`;
+/*!50001 DROP VIEW IF EXISTS `ordersview`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `ordersview` AS SELECT 
+ 1 AS `OrderID`,
+ 1 AS `Quantity`,
+ 1 AS `TotalCost`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `staff`
@@ -220,6 +231,24 @@ LOCK TABLES `staff` WRITE;
 INSERT INTO `staff` VALUES (1,'Mario Gollini','Manager','724, Parsley Lane, Old Town, Chicago, IL',351258074,'Mario.g@littlelemon.com','$70,000'),(2,'Adrian Gollini','Assistant Manager','334, Dill Square, Lincoln Park, Chicago, IL',351474048,'Adrian.g@littlelemon.com','$65,000'),(3,'Giorgos Dioudis','Head Chef','879 Sage Street, West Loop, Chicago, IL',351970582,'Giorgos.d@littlelemon.com','$50,000'),(4,'Fatma Kaya','Assistant Chef','132  Bay Lane, Chicago, IL',351963569,'Fatma.k@littlelemon.com','$45,000'),(5,'Elena Salvai','Head Waiter','989 Thyme Square, EdgeWater, Chicago, IL',351074198,'Elena.s@littlelemon.com','$40,000'),(6,'John Millar','Receptionist','245 Dill Square, Lincoln Park, Chicago, IL',351584508,'John.m@littlelemon.com','$35,000');
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `ordersview`
+--
+
+/*!50001 DROP VIEW IF EXISTS `ordersview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `ordersview` AS select `orders`.`OrderID` AS `OrderID`,`orders`.`Quantity` AS `Quantity`,`orders`.`TotalCost` AS `TotalCost` from `orders` where (`orders`.`Quantity` > 2) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -230,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-19 19:57:42
+-- Dump completed on 2023-07-20 11:17:56
